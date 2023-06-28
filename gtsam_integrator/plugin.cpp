@@ -3,6 +3,7 @@
 #include "common/data_format.hpp"
 #include "common/plugin.hpp"
 #include "common/switchboard.hpp"
+#include "spdlog/spdlog.h"
 
 #include <boost/smart_ptr/make_shared.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -157,7 +158,7 @@ private:
 
 #ifndef NDEBUG
         if (input_values->last_cam_integration_time > last_cam_time) {
-            std::cout << "New slow pose has arrived!\n";
+	    spdlog::debug("New slow pose has arrived!");
             last_cam_time = input_values->last_cam_integration_time;
         }
 #endif
@@ -194,7 +195,7 @@ private:
         ImuBias bias      = _pim_obj->biasHat();
 
 #ifndef NDEBUG
-        std::cout << "Integrating over " << prop_data.size() << " IMU samples\n";
+	spdlog::debug("Integrating over {} IMU samples", prop_data.size());
 #endif
 
         for (std::size_t i = 0; i < prop_data.size() - 1; i++) {
@@ -208,10 +209,9 @@ private:
         gtsam::Pose3    out_pose   = navstate_k.pose();
 
 #ifndef NDEBUG
-        std::cout << "Base Position (x, y, z) = " << input_values->position(0) << ", " << input_values->position(1) << ", "
-                  << input_values->position(2) << std::endl;
-
-        std::cout << "New  Position (x, y, z) = " << out_pose.x() << ", " << out_pose.y() << ", " << out_pose.z() << std::endl;
+	spdlog::debug("Base Position (x, y, z) = {}, {}, {}",
+			input_values->position(0), input_values->position(1), input_values->position(2));
+	spdlog::debug("New Position (x, y, z) = {}, {}, {}", out_pose.x(), out_pose.y(), out_pose.z());
 #endif
 
         _m_imu_raw.put(_m_imu_raw.allocate<imu_raw_type>(imu_raw_type{prev_bias.gyroscope(), prev_bias.accelerometer(),

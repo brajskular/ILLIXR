@@ -14,6 +14,7 @@
 #include "shaders/basic_shader.hpp"
 #include "shaders/timewarp_shader.hpp"
 #include "utils/hmd.hpp"
+#include "spdlog/spdlog.h"
 
 #include <chrono>
 #include <future>
@@ -179,7 +180,7 @@ private:
 
 #ifndef NDEBUG
         double time = duration2double<std::milli>(offload_duration);
-        std::cout << "Texture image collecting time: " << time << "ms" << std::endl;
+	spdlog::debug("Texture image collecting time: {} ms", time);
 #endif
 
         return pixels;
@@ -561,11 +562,11 @@ public:
 
         if (log_count > LOG_PERIOD) {
             const double time_since_render_ms_d = duration2double<std::milli>(time_since_render);
-            std::cout << "\033[1;36m[TIMEWARP]\033[0m Time since render: " << time_since_render_ms_d << "ms" << std::endl;
+	    spdlog::debug("[TIMEWARP] Time since render: {} ms", time_since_render_ms_d);
         }
 
         if (time_since_render > display_params::period) {
-            std::cout << "\033[0;31m[TIMEWARP: CRITICAL]\033[0m Stale frame!" << std::endl;
+            spdlog::warn("[TIMEWARP] Stale frame!");
         }
 #endif
         // Call Hologram
@@ -616,11 +617,11 @@ public:
             const time_point time_next_swap    = GetNextSwapTimeEstimate();
             const double     timewarp_estimate = duration2double<std::milli>(time_next_swap - time_last_swap);
 
-            std::cout << "\033[1;36m[TIMEWARP]\033[0m Swap time: " << time_swap << "ms" << std::endl
-                      << "\033[1;36m[TIMEWARP]\033[0m Motion-to-display latency: " << latency_mtd << "ms" << std::endl
-                      << "\033[1;36m[TIMEWARP]\033[0m Prediction-to-display latency: " << latency_ptd << "ms" << std::endl
-                      << "\033[1;36m[TIMEWARP]\033[0m Render-to-display latency: " << latency_rtd << "ms" << std::endl
-                      << "Next swap in: " << timewarp_estimate << "ms in the future" << std::endl;
+	    spdlog::debug("[TIMEWARP] Swap time: {} ms", time_swap);
+	    spdlog::debug("[TIMEWARP] Motion-to-display latency: {} ms", latency_mtd);
+	    spdlog::debug("[TIMEWARP] Prediction-to-display latency: {} ms", latency_ptd);
+	    spdlog::debug("[TIMEWARP] Render-to-display latency: {} ms", latency_rtd);
+	    spdlog::debug("Next swap in: {} ms in the future", timewarp_estimate);
         }
 #endif
 
