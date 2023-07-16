@@ -22,7 +22,7 @@ public:
         , _m_sensor_data{load_data()}
         , _m_dataset_first_time{_m_sensor_data.cbegin()->first}
         , _m_first_time{true} {
-		spdlogger();
+		spdlogger(ILLIXR::getenv_or("GROUND_TRUTH_SLAM_LOG_LEVEL", "off"));
 	}
 
     virtual void start() override {

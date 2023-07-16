@@ -68,7 +68,7 @@ public:
         // In production systems, this is certainly a good thing, but it makes the system harder to analyze.
         , disable_warp{ILLIXR::str_to_bool(ILLIXR::getenv_or("ILLIXR_TIMEWARP_DISABLE", "False"))}
         , enable_offload{ILLIXR::str_to_bool(ILLIXR::getenv_or("ILLIXR_OFFLOAD_ENABLE", "False"))} {
-	    spdlogger();       
+	    spdlogger(ILLIXR::getenv_or("TIMEWARP_GL_LOG_LEVEL", "off"));       
 	}
 
 private:
