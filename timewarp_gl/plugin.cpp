@@ -13,8 +13,8 @@
 #include "common/threadloop.hpp"
 #include "shaders/basic_shader.hpp"
 #include "shaders/timewarp_shader.hpp"
-#include "utils/hmd.hpp"
 #include "spdlog/spdlog.h"
+#include "utils/hmd.hpp"
 
 #include <chrono>
 #include <future>
@@ -68,8 +68,8 @@ public:
         // In production systems, this is certainly a good thing, but it makes the system harder to analyze.
         , disable_warp{ILLIXR::str_to_bool(ILLIXR::getenv_or("ILLIXR_TIMEWARP_DISABLE", "False"))}
         , enable_offload{ILLIXR::str_to_bool(ILLIXR::getenv_or("ILLIXR_OFFLOAD_ENABLE", "False"))} {
-	    spdlogger(ILLIXR::getenv_or("TIMEWARP_GL_LOG_LEVEL", "off"));       
-	}
+        spdlogger(ILLIXR::getenv_or("TIMEWARP_GL_LOG_LEVEL", "off"));
+    }
 
 private:
     const std::shared_ptr<switchboard>             sb;
@@ -182,7 +182,7 @@ private:
 
 #ifndef NDEBUG
         double time = duration2double<std::milli>(offload_duration);
-	spdlog::get(name)->debug("Texture image collecting time: {} ms", time);
+        spdlog::get(name)->debug("Texture image collecting time: {} ms", time);
 #endif
 
         return pixels;
@@ -344,7 +344,7 @@ public:
         glewExperimental      = GL_TRUE;
         const GLenum glew_err = glewInit();
         if (glew_err != GLEW_OK) {
-	    spdlog::get(name)->error("[timewarp_gl] GLEW Error: {}", glewGetErrorString(glew_err));
+            spdlog::get(name)->error("[timewarp_gl] GLEW Error: {}", glewGetErrorString(glew_err));
             ILLIXR::abort("[timewarp_gl] Failed to initialize GLEW");
         }
 
@@ -564,11 +564,11 @@ public:
 
         if (log_count > LOG_PERIOD) {
             const double time_since_render_ms_d = duration2double<std::milli>(time_since_render);
-	    spdlog::get(name)->debug("Time since render: {} ms", time_since_render_ms_d);
+            spdlog::get(name)->debug("Time since render: {} ms", time_since_render_ms_d);
         }
 
         if (time_since_render > display_params::period) {
-	   spdlog::get(name)->warn("Stale frame!");
+            spdlog::get(name)->warn("Stale frame!");
         }
 #endif
         // Call Hologram
@@ -619,11 +619,11 @@ public:
             const time_point time_next_swap    = GetNextSwapTimeEstimate();
             const double     timewarp_estimate = duration2double<std::milli>(time_next_swap - time_last_swap);
 
-	    spdlog::get(name)->debug("Swap time: {} ms", time_swap);
-	    spdlog::get(name)->debug("Motion-to-display latency: {} ms", latency_mtd);
-	    spdlog::get(name)->debug("Prediction-to-display latency: {} ms", latency_ptd);
-	    spdlog::get(name)->debug("Render-to-display latency: {} ms", latency_rtd);
-	    spdlog::get(name)->debug("Next swap in: {} ms in the future", timewarp_estimate);
+            spdlog::get(name)->debug("Swap time: {} ms", time_swap);
+            spdlog::get(name)->debug("Motion-to-display latency: {} ms", latency_mtd);
+            spdlog::get(name)->debug("Prediction-to-display latency: {} ms", latency_ptd);
+            spdlog::get(name)->debug("Render-to-display latency: {} ms", latency_rtd);
+            spdlog::get(name)->debug("Next swap in: {} ms in the future", timewarp_estimate);
         }
 #endif
 
