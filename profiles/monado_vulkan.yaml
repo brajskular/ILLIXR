@@ -1,6 +1,6 @@
 # This file was auto generated, take caution if manually editing.
 plugins: audio_pipeline,gtsam_integrator,offline_cam,offline_imu,openxr_app,pose_prediction,timewarp_vk
-visualizers: openvins,kimera_vio
+visualizers: openvins,kimera_vio,orb_slam
 enable_offload: False
 enable_alignment: False
 enable_verbose_errors: False

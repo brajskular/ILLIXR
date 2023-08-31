@@ -1,6 +1,7 @@
 #include "illixr.hpp"
 
 #include <csignal>
+#include <iostream>
 
 #ifndef NDEBUG
 /**
