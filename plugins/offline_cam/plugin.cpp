@@ -9,9 +9,26 @@
 #include <thread>
 
 using namespace ILLIXR;
+// __attribute__((visibility("default")))
+extern "C" {    
+    void start_roi_sam();
+    void end_roi_sam();
+}
+
+    void start_roi_sam() {
+        printf("sam started roi\n");
+    }
+
+    void end_roi_sam() {
+        printf("sam ended roi\n");
+    }
 
 class offline_cam : public threadloop {
 public:
+    
+    int sim_img_count = 0;
+    bool flag = false;
+
     offline_cam(const std::string& name_, phonebook* pb_)
         : threadloop{name_, pb_}
         , sb{pb->lookup_impl<switchboard>()}
@@ -68,8 +85,31 @@ public:
             auto img0 = nearest_row->second.cam0.load();
             auto img1 = nearest_row->second.cam1.load();
 
+
+
+
             time_point expected_real_time_given_dataset_time(
                 std::chrono::duration<long, std::nano>{nearest_row->first - dataset_first_time});
+
+            sim_img_count++;
+            // need to log time from start roi to end roi
+            if(sim_img_count == 100) {
+                start_roi_sam();
+                flag = true;
+                // start timer
+                // start_point = std::chrono::high_resolution_clock::now();
+            } else if(sim_img_count == 120) {
+                end_roi_sam();
+                flag = false;
+                // end timer
+                // end_point = std::chrono::high_resolution_clock::now();
+                // print time elapsed
+                // std::cout << "Time difference (sec) = " <<  (std::chrono::duration_cast<std::chrono::microseconds>(end_point - start_point).count()) /1000000.0  <<std::endl;
+            }
+            // if(flag) {
+            //     std::cout << "In roi" << std::endl;
+            // }
+            // std::cout << "I am here" << std::endl;
             _m_cam_publisher.put(_m_cam_publisher.allocate<cam_type>(cam_type{
                 expected_real_time_given_dataset_time,
                 img0,
